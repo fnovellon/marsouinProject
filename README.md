@@ -4,7 +4,7 @@
 
 * [Florian NOVELLON](https://github.com/fnovellon) ([fl.novellon@gmail.com](mailto:fl.novellon@gmail.com))
 
-* [Arnaud SOULIER](https://github.com/souliera) ([soulier.arnaud34.com](mailto:soulier.arnaud34.com))
+* [Arnaud SOULIER](https://github.com/souliera) ([soulier.arnaud@hotmail.fr](mailto:soulier.arnaud@hotmail.fr))
 
 * [Fabien FERAUD](https://github.com/fferaud)([fabferaud@orange.fr](mailto:fabferaud@orange.fr))
 
