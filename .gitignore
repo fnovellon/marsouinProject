@@ -1,1 +1,7 @@
 env/*
+!env/.gitkeep
+
+out/*
+!out/.gitkeep 
+
+.vscode
