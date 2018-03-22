@@ -26,7 +26,7 @@ for data in datas :
     tokens = word_tokenize(data)
     for token in tokens :
         if "." in token : 
-            m = re.search('[a-z]\.[A-Z]', token)
+            m = re.search('[a-z0-9]\.[A-Z]', token)
             if m :
                 buffer = token.split(".")
                 newTokens.append(buffer[0])
