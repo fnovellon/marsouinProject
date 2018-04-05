@@ -1,5 +1,13 @@
+import string
 import csv
 import nltk
+from nltk import word_tokenize
+import csv
+import numpy as np
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
 from nltk import word_tokenize
 
 def read_csv(csv_file_name):
@@ -41,7 +49,7 @@ def remove_stop_words(opinions):
     stop_words = [];
 
     for element in stop_words_list:
-        stop_words.append(word_tokenize(element)[0]);
+        stop_words.append(element.rstrip("\n"));
 
     data = [];
 
@@ -53,6 +61,13 @@ def remove_stop_words(opinions):
                 tmp.append(word);
 
         data.append(tmp);
+
+    return data;
+
+def untokenize(opinions):
+    data = [];
+    for opinion in opinions:
+        data.append("".join([" "+i if not i.startswith("'") and i not in string.punctuation else i for i in opinion]).strip());
 
     return data;
 
@@ -75,24 +90,56 @@ def split_sentences(opinions):
 
     return data;
 
-opinions = read_csv("data/test.csv");
-print(opinions[0]);
-print("");
+def learn(opinions_m):
+    class_m = read_csv("data/labels.csv");
+
+    opinions_train, opinions_test, class_train, class_test = train_test_split(opinions_m, class_m, test_size=0.33, random_state=1);
+
+    vectorizer = TfidfVectorizer();
+    opinions_train = vectorizer.fit_transform(opinions_train);
+    opinions_test = vectorizer.transform(opinions_test);
+
+    clf = MultinomialNB();
+    clf.fit(opinions_train, class_train);
+    pred = clf.predict(opinions_test);
+    print(metrics.accuracy_score(class_test, pred));
+
+print("begin read\n");
+opinions = read_csv("data/dataset.csv");
+print("end read\n");
+# print(opinions[0]);
+# print("");
+print("begin lower\n");
 opinions = to_lower(opinions);
-print(opinions[0]);
-print("");
+print("end lower\n");
+# print(opinions[0]);
+# print("");
+print("begin tokenize\n");
 opinions = tokenize(opinions);
-print(opinions[0]);
-print("");
+print("end tokenize\n");
+# print(opinions[0]);
+# print("");
+print("begin lemmatize\n");
 opinions = lemmatize(opinions);
-print(opinions[0]);
-print("");
+print("end lemmatize\n");
+# print(opinions[0]);
+# print("");
+print("begin stop words\n");
 opinions = remove_stop_words(opinions);
-print(opinions[0]);
-print("");
-opinions = split_sentences(opinions);
+print("end stop words\n");
+# print(opinions[0]);
+# print("");
+# opinions = split_sentences(opinions);
 # for element in opinions[0]:
 #     print(element);
 #     print("");
-print(opinions[0]);
-print("");
+# print(opinions[0]);
+# print("");
+print("begin untokenize\n");
+opinions = untokenize(opinions);
+print("end untokenize\n");
+# print(opinions[0]);
+# print("");
+print("begin learn\n");
+learn(opinions);
+print("end learn\n");
