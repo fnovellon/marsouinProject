@@ -1,7 +1,6 @@
 import csv
 import nltk
 from nltk import word_tokenize
-import treetaggerwrapper
 
 def read_csv(csv_file_name):
     csv_file = open(csv_file_name, "r");
