@@ -2,6 +2,7 @@ import string
 import csv
 import nltk
 from nltk import word_tokenize
+import treetaggerwrapper
 import csv
 import re
 import numpy as np
@@ -66,6 +67,30 @@ def lemmatize(opinions):
         data.append(lemmatize);
 
     return data;
+
+def remove_tags_from_list(opinions, tags):
+    tagger = treetaggerwrapper.TreeTagger(TAGLANG='en', TAGDIR='./tt');
+    new_opinions = [];
+    # i = 0;
+    for opinion in opinions:
+        # print("iteration " , i)
+        phrase = " ".join(opinion);
+        tagged = tagger.tag_text(phrase);
+        new_opinion = [];
+
+        for element in tagged:
+            strings = [];
+            strings = element.split("\t");
+            try:
+                if strings[1] not in tags:
+                    new_opinion.append(strings[0])
+            except:
+                    continue;
+        new_opinions.append(new_opinion)
+        # i = i + 1;
+    # print("result : ")
+
+    return new_opinions;
 
 def remove_stop_words(opinions):
     stop_words_file = open("rsc/stopwords.csv", "r");
@@ -150,44 +175,49 @@ def learn(opinions_m):
     # return metrics.accuracy_score(class_test, pred);
 
 print("begin read\n");
-opinions = read_csv("data/test_data.csv");
+opinions = read_csv("data/dataset2.csv");
 print("end read\n");
 print(opinions[0]);
-print("");
-print("begin tokenize\n");
-opinions = tokenize(opinions);
-print("end tokenize\n");
-print(opinions[0]);
-print("");
-print("begin lower\n");
-opinions = to_lower(opinions);
-print("end lower\n");
-print(opinions[0]);
-print("");
-print("begin lemmatize\n");
-opinions = lemmatize(opinions);
-print("end lemmatize\n");
-print(opinions[0]);
-print("");
-print("begin stop words\n");
-opinions = remove_stop_words(opinions);
-print("end stop words\n");
-print(opinions[0]);
-print("");
-print("begin untokenize\n");
-opinions = untokenize(opinions);
-print("end untokenize\n");
-print(opinions[0]);
-print("");
-print("begin write\n");
-write_csv("data/test_data2.csv", opinions);
-print("end write\n");
+# print("");
+# print("begin tokenize\n");
+# opinions = tokenize(opinions);
+# print("end tokenize\n");
+# print(opinions[0]);
+# print("");
+# print("begin lower\n");
+# opinions = to_lower(opinions);
+# print("end lower\n");
+# print(opinions[0]);
+# print("");
+# print("begin lemmatize\n");
+# opinions = lemmatize(opinions);
+# print("end lemmatize\n");
+# print(opinions[0]);
+# print("");
+# print("begin remove tags\n");
+# opinions = remove_tags_from_list(opinions, ["CC","DT","EX","FW","IN","IN/that","JJ","LS","MD","NN","NNS","NP","NPS","PDT","POS","PP","PP$","SENT","SYM","TO","UH","VB","VBD","VBG","VBN","VBZ","VBP","VD","VDD","VDG","VDN","VDZ","VDP","VH","VHD","VHG","VHN","VHZ","VHP","WDT","WP","WP","WRB",":","$"]);
+# print("end remove tags\n");
+# print(opinions[0]);
+# print("");
+# print("begin stop words\n");
+# opinions = remove_stop_words(opinions);
+# print("end stop words\n");
+# print(opinions[0]);
+# print("");
+# print("begin untokenize\n");
+# opinions = untokenize(opinions);
+# print("end untokenize\n");
+# print(opinions[0]);
+# print("");
+# print("begin write\n");
+# write_csv("data/test_data2.csv", opinions);
+# print("end write\n");
 # ratio = [];
 # for i in range(100):
     # print("begin learn " + str(i) + "\n");
-# print("begin learn");
-# print(learn(opinions));
-# print("end learn");
+print("begin learn");
+print(learn(opinions));
+print("end learn");
     # print("end learn " + str(i) + "\n");
 
 # average = 0;
