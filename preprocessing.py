@@ -3,6 +3,7 @@ import csv
 import nltk
 from nltk import word_tokenize
 import csv
+import re
 import numpy as np
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -15,21 +16,43 @@ def read_csv(csv_file_name):
     opinions = csv_file.readlines();
     return opinions;
 
-def to_lower(opinions):
-    data = [];
-
-    for opinion in opinions:
-        data.append(opinion.lower());
-
-    return data;
-
 def tokenize(opinions):
-    data = [];
+    datas = [];
 
     for opinion in opinions:
-        data.append(word_tokenize(opinion));
+        newTokens = [];
+        tokens = word_tokenize(opinion);
+        for token in tokens:
+            if "." in token:
+                m = re.search('[a-z0-9]\.[A-Z]', token);
+                if m:
+                    buffer = token.split(".");
+                    newTokens.append(buffer[0]);
+                    newTokens.append(".");
+                    newTokens.append(buffer[1]);
 
-    return data;
+                else:
+                    newTokens.append(token);
+
+            else:
+                newTokens.append(token);
+
+        datas.append(newTokens);
+
+    return datas;
+
+def to_lower(opinions):
+    datas = [];
+
+    for opinion in opinions:
+        tokens = [];
+
+        for token in opinion:
+            tokens.append(token.lower());
+
+        datas.append(tokens);
+
+    return datas;
 
 def lemmatize(opinions):
     wnl = nltk.WordNetLemmatizer();
@@ -90,6 +113,11 @@ def split_sentences(opinions):
 
     return data;
 
+def write_csv(csv_file_name, opinions):
+    csv_file = open(csv_file_name, "w");
+    writer = csv.writer(csv_file, delimiter='\n');
+    writer.writerow(opinions);
+
 def learn(opinions_m):
     class_m = read_csv("data/labels.csv");
 
@@ -107,39 +135,36 @@ def learn(opinions_m):
 print("begin read\n");
 opinions = read_csv("data/dataset.csv");
 print("end read\n");
-# print(opinions[0]);
-# print("");
-print("begin lower\n");
-opinions = to_lower(opinions);
-print("end lower\n");
-# print(opinions[0]);
-# print("");
+print(opinions[0]);
+print("");
 print("begin tokenize\n");
 opinions = tokenize(opinions);
 print("end tokenize\n");
-# print(opinions[0]);
-# print("");
+print(opinions[0]);
+print("");
+print("begin lower\n");
+opinions = to_lower(opinions);
+print("end lower\n");
+print(opinions[0]);
+print("");
 print("begin lemmatize\n");
 opinions = lemmatize(opinions);
 print("end lemmatize\n");
-# print(opinions[0]);
-# print("");
+print(opinions[0]);
+print("");
 print("begin stop words\n");
 opinions = remove_stop_words(opinions);
 print("end stop words\n");
-# print(opinions[0]);
-# print("");
-# opinions = split_sentences(opinions);
-# for element in opinions[0]:
-#     print(element);
-#     print("");
-# print(opinions[0]);
-# print("");
+print(opinions[0]);
+print("");
 print("begin untokenize\n");
 opinions = untokenize(opinions);
 print("end untokenize\n");
-# print(opinions[0]);
-# print("");
+print(opinions[0]);
+print("");
+print("begin write\n");
+write_csv("data/dataset2.csv", opinions);
+print("end write\n");
 print("begin learn\n");
 learn(opinions);
 print("end learn\n");
