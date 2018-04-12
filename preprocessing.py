@@ -10,6 +10,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 from nltk import word_tokenize
+from sklearn.neighbors import KNeighborsClassifier
 
 def read_csv(csv_file_name):
     csv_file = open(csv_file_name, "r");
@@ -120,20 +121,36 @@ def write_csv(csv_file_name, opinions):
 
 def learn(opinions_m):
     class_m = read_csv("data/labels.csv");
-
-    opinions_train, opinions_test, class_train, class_test = train_test_split(opinions_m, class_m, test_size=0.33, random_state=1);
+    opinions_train, opinions_test, class_train, class_test = train_test_split(opinions_m, class_m, test_size=0.33);
 
     vectorizer = TfidfVectorizer();
     opinions_train = vectorizer.fit_transform(opinions_train);
     opinions_test = vectorizer.transform(opinions_test);
 
-    clf = MultinomialNB();
-    clf.fit(opinions_train, class_train);
-    pred = clf.predict(opinions_test);
-    print(metrics.accuracy_score(class_test, pred));
+    neigh = KNeighborsClassifier(n_neighbors=100);
+    neigh.fit(opinions_train, class_train);
+
+    pred = neigh.predict(opinions_test);
+
+    return metrics.accuracy_score(class_test, pred);
+
+
+
+    # class_m = read_csv("data/labels.csv");
+    #
+    # opinions_train, opinions_test, class_train, class_test = train_test_split(opinions_m, class_m, test_size=0.33);
+    #
+    # vectorizer = TfidfVectorizer();
+    # opinions_train = vectorizer.fit_transform(opinions_train);
+    # opinions_test = vectorizer.transform(opinions_test);
+    #
+    # clf = MultinomialNB();
+    # clf.fit(opinions_train, class_train);
+    # pred = clf.predict(opinions_test);
+    # return metrics.accuracy_score(class_test, pred);
 
 print("begin read\n");
-opinions = read_csv("data/dataset.csv");
+opinions = read_csv("data/test_data.csv");
 print("end read\n");
 print(opinions[0]);
 print("");
@@ -163,8 +180,19 @@ print("end untokenize\n");
 print(opinions[0]);
 print("");
 print("begin write\n");
-write_csv("data/dataset2.csv", opinions);
+write_csv("data/test_data2.csv", opinions);
 print("end write\n");
-print("begin learn\n");
-learn(opinions);
-print("end learn\n");
+# ratio = [];
+# for i in range(100):
+    # print("begin learn " + str(i) + "\n");
+# print("begin learn");
+# print(learn(opinions));
+# print("end learn");
+    # print("end learn " + str(i) + "\n");
+
+# average = 0;
+#
+# for i in range(100):
+#     average = average + ratio[i];
+#
+# print(average / 100);

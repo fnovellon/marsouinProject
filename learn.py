@@ -23,7 +23,7 @@ def write_csv(csv_file_name, data):
 
 opinions_m = read_csv("data/dataset2.csv");
 class_m = read_csv("data/labels.csv");
-test = read_csv("data/test_data.csv");
+test = read_csv("data/test_data2.csv");
 
 opinions_train, opinions_test, class_train, class_test = train_test_split(opinions_m, class_m, test_size=0.0);
 opinions_test_test, opinions_test_train, class_test_test, class_test_train = train_test_split(test, test, test_size=0.0);
