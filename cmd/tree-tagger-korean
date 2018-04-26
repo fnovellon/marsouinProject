@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Set these paths appropriately
+
+BIN="/mnt/c/Users/fabien/Documents/marsouinProject/bin"
+CMD="/mnt/c/Users/fabien/Documents/marsouinProject/cmd"
+LIB="/mnt/c/Users/fabien/Documents/marsouinProject/lib"
+
+OPTIONS="-token -lemma -sgml"
+
+TAGGER=${BIN}/tree-tagger
+TOKENIZER=${CMD}/tokenize-korean.pl
+PARFILE=${LIB}/korean-utf8.par
+
+$TOKENIZER $* |
+$TAGGER $OPTIONS $PARFILE |
+$CMD/add-korean-sentence-markers.pl |
+$CMD/reformat-korean-tagger-output.pl
