@@ -69,6 +69,8 @@ def lemmatize(opinions):
     return data;
 
 def remove_tags_from_list(opinions, tags):
+
+    to_save = ['love','hate','like','adore','deceive','dislike','enjoy', 'i like', 'i'];
     tagger = treetaggerwrapper.TreeTagger(TAGLANG='en', TAGDIR='./tt');
     new_opinions = [];
     # i = 0;
@@ -82,7 +84,7 @@ def remove_tags_from_list(opinions, tags):
             strings = [];
             strings = element.split("\t");
             try:
-                if strings[1] not in tags:
+                if strings[0] not in tags and strings[1] not in to_save:
                     new_opinion.append(strings[0])
             except:
                     continue;
@@ -177,40 +179,44 @@ def learn(opinions_m):
 print("begin read\n");
 opinions = read_csv("data/dataset.csv");
 print("end read\n");
-print(opinions[0]);
+print(opinions[9999]);
 print("");
 print("begin tokenize\n");
 opinions = tokenize(opinions);
 print("end tokenize\n");
-print(opinions[0]);
+print(opinions[9999]);
 print("");
 print("begin lower\n");
 opinions = to_lower(opinions);
 print("end lower\n");
-print(opinions[0]);
+print(opinions[9999]);
 print("");
+
+print("begin remove tags\n");
+opinions = remove_tags_from_list(opinions, ["(", ")", "``","CC","DT","EX","FW","IN","IN/that","LS","MD","PDT","POS","PP","PP$","SENT","SYM","TO","UH","WDT","WP","WP","WRB",":","$"]);
+print("end remove tags\n");
+print(opinions[9999]);
+print("");
+
 print("begin lemmatize\n");
 opinions = lemmatize(opinions);
 print("end lemmatize\n");
-print(opinions[0]);
+print(opinions[9999]);
 print("");
-# print("begin remove tags\n");
-# opinions = remove_tags_from_list(opinions, ["CC","DT","EX","FW","IN","IN/that","JJ","LS","MD","PDT","POS","PP","PP$","SENT","SYM","TO","UH","WDT","WP","WP","WRB",":","$"]);
-# print("end remove tags\n");
-# print(opinions[0]);
-# print("");
+
+
 print("begin stop words\n");
 opinions = remove_stop_words(opinions);
 print("end stop words\n");
-print(opinions[0]);
+print(opinions[9999]);
 print("");
 print("begin untokenize\n");
 opinions = untokenize(opinions);
 print("end untokenize\n");
-print(opinions[0]);
+print(opinions[9999]);
 print("");
 print("begin write\n");
-write_csv("data/dateset2.csv", opinions);
+write_csv("data/dataset2.csv", opinions);
 print("end write\n");
 # ratio = [];
 # for i in range(100):
