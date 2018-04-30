@@ -36,9 +36,9 @@ test = read_csv("data/test_data2.csv"); #Avis du challenge
 class_test = read_csv("data/test_labels.csv"); #Resultats du challenge
 
 # kf = KFold(n_splits=3);
-# clf = MultinomialNB();
+clf = MultinomialNB();
 # clf = KNeighborsClassifier(n_neighbors=10);
-clf = svm.SVC(kernel='linear');
+# clf = svm.SVC(kernel='linear');
 
 opinions_train = vectorizer.fit_transform(opinions_m);
 opinions_test = vectorizer.transform(test);
